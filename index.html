@@ -3,7 +3,6 @@
 <head>
     <title>Jump Game</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -13,12 +12,30 @@
     <div id="game-container">
         
         <img id="player" hidden src="https://i.pinimg.com/originals/48/c5/34/48c53463d25773df53e0ddf35b103502.png" />
-        <canvas id="myCanvas"></canvas>
+        <canvas id="myCanvas" width="400"></canvas>
         </div> 
+    <script src="https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js"></script>
     <script src="./script.js"></script>
     <script>
         window.onload = ()=>{
+            
             let game = new Game("myCanvas");
+            webgazer.showVideoPreview(false);
+            let initialized = false;
+            webgazer.setGazeListener((data, elapsedTime) => {
+                if (data == null) {
+                    return;
+                }
+                var x = data.x; //these x coordinates are relative to the viewport
+                var y = data.y; //these y coordinates are relative to the viewport
+
+                if (!initialized && webgazer.isReady()) {
+                    game.start();
+                    initialized = true;
+                } else if (initialized){
+                    game.moveBucketWithWebgazer(x);
+                }
+            }).begin();
         };
     </script>
 </body>

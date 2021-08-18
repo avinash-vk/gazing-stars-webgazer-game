@@ -11,7 +11,8 @@ class Game {
     this.spawns = [];
     document.addEventListener("keydown", () => this.moveBucket());
     this.score = 0;
-    this.drawBucket();
+  }
+  start() {
     this.loop();
     setTimeout(() => this.initStars(), 0);
   }
@@ -71,7 +72,7 @@ class Game {
     this.clearRect();
     this.drawBucket();
     this.spawns.forEach((spawn) => {
-      spawn.y += 2;
+      spawn.y += 1;
       if (this.checkCollisions(spawn.x, spawn.y)) {
         this.score += 1;
         this.spawns = this.spawns.filter((spawnx) => spawnx.id !== spawn.id);
@@ -99,10 +100,23 @@ class Game {
   }
   moveBucket(e) {
     e = e || window.event;
+
+    console.log(this.playerPos, this.canvas.width);
     if (e.keyCode == "37" && this.playerPos > 6) {
       this.playerPos -= this.sensitivity;
     } else if (e.keyCode == "39" && this.playerPos < this.canvas.width - 24) {
       this.playerPos += this.sensitivity;
+    }
+  }
+  moveBucketWithWebgazer(x) {
+    x = x * (this.canvas.width / screen.width);
+    console.log(x, this.canvas.width);
+    if (x <= 6) {
+      this.playerPos = 6;
+    } else if (x >= this.canvas.width - 24) {
+      this.playerPos = this.canvas.width - 24;
+    } else {
+      this.playerPos = x;
     }
   }
 }
